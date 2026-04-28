@@ -21,7 +21,7 @@ body{
     box-shadow:0 0 5px rgba(0,0,0,0.1);
 }
 
-input, textarea{
+input, textarea, select{
     width:100%;
     padding:8px;
     margin-top:5px;
@@ -61,12 +61,24 @@ button{
 @method('PUT')
 
 <label>Title</label>
-
 <input type="text" name="title" value="{{ $post->title }}" required>
 
 <label>Content</label>
-
 <textarea name="content" rows="5" required>{{ $post->content }}</textarea>
+
+<!--  STATUS ADDED HERE -->
+<label>Status</label>
+<select name="status" required>
+
+    <option value="draft" {{ $post->status == 'draft' ? 'selected' : '' }}>
+        Draft
+    </option>
+
+    <option value="published" {{ $post->status == 'published' ? 'selected' : '' }}>
+        Published
+    </option>
+
+</select>
 
 <button type="submit">
 Update Post

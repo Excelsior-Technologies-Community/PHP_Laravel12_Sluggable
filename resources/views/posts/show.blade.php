@@ -29,6 +29,22 @@ body{
     margin-bottom:10px;
 }
 
+/*  STATUS STYLE */
+.status{
+    margin-bottom:10px;
+    font-size:14px;
+}
+
+.status.published{
+    color:green;
+    font-weight:bold;
+}
+
+.status.draft{
+    color:orange;
+    font-weight:bold;
+}
+
 .back{
     display:inline-block;
     margin-top:15px;
@@ -49,6 +65,11 @@ body{
 
 <div class="slug">
 Slug: {{ $post->slug }}
+</div>
+
+<!--  STATUS ADDED HERE -->
+<div class="status {{ $post->status }}">
+    Status: {{ ucfirst($post->status) }}
 </div>
 
 <p>

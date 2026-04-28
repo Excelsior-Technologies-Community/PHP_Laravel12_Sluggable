@@ -21,7 +21,7 @@ body{
     box-shadow:0 0 5px rgba(0,0,0,0.1);
 }
 
-input, textarea{
+input, textarea, select{
     width:100%;
     padding:8px;
     margin-top:5px;
@@ -60,12 +60,17 @@ button{
 @csrf
 
 <label>Title</label>
-
 <input type="text" name="title" required>
 
 <label>Content</label>
-
 <textarea name="content" rows="5" required></textarea>
+
+<!-- ADDED STATUS FIELD -->
+<label>Status</label>
+<select name="status" required>
+    <option value="draft">Draft</option>
+    <option value="published">Published</option>
+</select>
 
 <button type="submit">
 Save Post

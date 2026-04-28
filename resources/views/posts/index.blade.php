@@ -81,6 +81,45 @@ body{
     display:inline-block;
 }
 
+/* SEARCH BOX STYLE */
+.search-box{
+    margin:15px 0;
+    display:flex;
+    gap:10px;
+}
+
+.search-box input{
+    flex:1;
+    padding:8px;
+    border:1px solid #ccc;
+    border-radius:5px;
+}
+
+.search-box button{
+    padding:8px 14px;
+    background:#007bff;
+    color:white;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+}
+
+/* STATUS STYLE */
+.status{
+    margin-top:8px;
+    font-size:14px;
+}
+
+.status.published{
+    color:green;
+    font-weight:bold;
+}
+
+.status.draft{
+    color:orange;
+    font-weight:bold;
+}
+
 </style>
 
 </head>
@@ -98,6 +137,15 @@ Create Post
 
 </div>
 
+<!-- SEARCH FEATURE -->
+<form method="GET" action="{{ route('posts.index') }}" class="search-box">
+
+    <input type="text" name="search" placeholder="Search posts by title..." value="{{ request('search') }}">
+
+    <button type="submit">Search</button>
+
+</form>
+
 @if(session('success'))
 <div class="success">
 {{ session('success') }}
@@ -112,6 +160,12 @@ Create Post
 
 <div class="slug">
 Slug: {{ $post->slug }}
+</div>
+
+<!-- STATUS ADDED HERE -->
+<div class="status {{ $post->status }}">
+    Status:
+    {{ ucfirst($post->status) }}
 </div>
 
 <div class="actions">
