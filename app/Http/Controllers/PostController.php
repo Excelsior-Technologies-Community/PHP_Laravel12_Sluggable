@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
 use App\Models\Post;
 
 class PostController extends Controller
@@ -15,9 +14,16 @@ class PostController extends Controller
     |--------------------------------------------------------------------------
     */
 
-    public function index()
+    public function index(Request $request)
     {
-        $posts = Post::latest()->get();
+        $query = Post::query();
+
+        // Search feature
+        if ($request->has('search')) {
+            $query->where('title', 'like', '%' . $request->search . '%');
+        }
+
+        $posts = $query->latest()->get();
 
         return view('posts.index', compact('posts'));
     }
@@ -39,22 +45,23 @@ class PostController extends Controller
     |--------------------------------------------------------------------------
     */
 
-  public function store(Request $request)
-{
-    $request->validate([
-        'title' => 'required|string|max:255',
-        'content' => 'required|string'
-    ]);
+    public function store(Request $request)
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'content' => 'required|string',
+            'status' => 'required|in:draft,published' // ADDED
+        ]);
 
-    Post::create([
-        'title' => $request->title,
-        'content' => $request->content
-    ]);
+        Post::create([
+            'title' => $request->title,
+            'content' => $request->content,
+            'status' => $request->status // ADDED
+        ]);
 
-    return redirect()->route('posts.index')
-                     ->with('success','Post Created Successfully');
-}
-
+        return redirect()->route('posts.index')
+            ->with('success', 'Post Created Successfully');
+    }
 
     /*
     |--------------------------------------------------------------------------
@@ -86,19 +93,20 @@ class PostController extends Controller
 
     public function update(Request $request, Post $post)
     {
-
         $request->validate([
             'title' => 'required',
-            'content' => 'required'
+            'content' => 'required',
+            'status' => 'required|in:draft,published' //ADDED
         ]);
 
         $post->update([
             'title' => $request->title,
-            'content' => $request->content
+            'content' => $request->content,
+            'status' => $request->status // ADDED
         ]);
 
         return redirect()->route('posts.index')
-                         ->with('success','Post Updated Successfully');
+            ->with('success', 'Post Updated Successfully');
     }
 
     /*
@@ -112,6 +120,6 @@ class PostController extends Controller
         $post->delete();
 
         return redirect()->route('posts.index')
-                         ->with('success','Post Deleted Successfully');
+            ->with('success', 'Post Deleted Successfully');
     }
 }
