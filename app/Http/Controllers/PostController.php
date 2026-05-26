@@ -7,18 +7,15 @@ use App\Models\Post;
 
 class PostController extends Controller
 {
-
     /*
     |--------------------------------------------------------------------------
     | Display All Posts
     |--------------------------------------------------------------------------
     */
-
     public function index(Request $request)
     {
         $query = Post::query();
 
-        // Search feature
         if ($request->has('search')) {
             $query->where('title', 'like', '%' . $request->search . '%');
         }
@@ -33,7 +30,6 @@ class PostController extends Controller
     | Show Create Form
     |--------------------------------------------------------------------------
     */
-
     public function create()
     {
         return view('posts.create');
@@ -44,19 +40,18 @@ class PostController extends Controller
     | Store Post
     |--------------------------------------------------------------------------
     */
-
     public function store(Request $request)
     {
         $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'required|string',
-            'status' => 'required|in:draft,published' // ADDED
+            'status' => 'required|in:draft,published'
         ]);
 
         Post::create([
             'title' => $request->title,
             'content' => $request->content,
-            'status' => $request->status // ADDED
+            'status' => $request->status
         ]);
 
         return redirect()->route('posts.index')
@@ -68,7 +63,6 @@ class PostController extends Controller
     | Show Single Post (Slug)
     |--------------------------------------------------------------------------
     */
-
     public function show(Post $post)
     {
         return view('posts.show', compact('post'));
@@ -79,7 +73,6 @@ class PostController extends Controller
     | Show Edit Form
     |--------------------------------------------------------------------------
     */
-
     public function edit(Post $post)
     {
         return view('posts.edit', compact('post'));
@@ -90,19 +83,18 @@ class PostController extends Controller
     | Update Post
     |--------------------------------------------------------------------------
     */
-
     public function update(Request $request, Post $post)
     {
         $request->validate([
-            'title' => 'required',
-            'content' => 'required',
-            'status' => 'required|in:draft,published' //ADDED
+            'title' => 'required|string|max:255',
+            'content' => 'required|string',
+            'status' => 'required|in:draft,published'
         ]);
 
         $post->update([
             'title' => $request->title,
             'content' => $request->content,
-            'status' => $request->status // ADDED
+            'status' => $request->status
         ]);
 
         return redirect()->route('posts.index')
@@ -111,10 +103,22 @@ class PostController extends Controller
 
     /*
     |--------------------------------------------------------------------------
+    | Toggle Status (Publish / Draft)
+    |--------------------------------------------------------------------------
+    */
+    public function toggleStatus(Post $post)
+    {
+        $post->status = $post->status === 'draft' ? 'published' : 'draft';
+        $post->save();
+
+        return back()->with('success', 'Post status updated!');
+    }
+
+    /*
+    |--------------------------------------------------------------------------
     | Delete Post
     |--------------------------------------------------------------------------
     */
-
     public function destroy(Post $post)
     {
         $post->delete();

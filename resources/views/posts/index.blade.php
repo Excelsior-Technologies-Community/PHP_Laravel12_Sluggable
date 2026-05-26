@@ -45,6 +45,11 @@ body{
     color:black;
 }
 
+.btn-toggle{
+    background:#6f42c1;
+    color:white;
+}
+
 .btn-delete{
     background:#dc3545;
     color:white;
@@ -81,7 +86,6 @@ body{
     display:inline-block;
 }
 
-/* SEARCH BOX STYLE */
 .search-box{
     margin:15px 0;
     display:flex;
@@ -104,7 +108,6 @@ body{
     cursor:pointer;
 }
 
-/* STATUS STYLE */
 .status{
     margin-top:8px;
     font-size:14px;
@@ -137,7 +140,6 @@ Create Post
 
 </div>
 
-<!-- SEARCH FEATURE -->
 <form method="GET" action="{{ route('posts.index') }}" class="search-box">
 
     <input type="text" name="search" placeholder="Search posts by title..." value="{{ request('search') }}">
@@ -162,13 +164,16 @@ Create Post
 Slug: {{ $post->slug }}
 </div>
 
-<!-- STATUS ADDED HERE -->
 <div class="status {{ $post->status }}">
     Status:
     {{ ucfirst($post->status) }}
 </div>
 
 <div class="actions">
+
+<a href="/posts/toggle/{{ $post->slug }}" class="btn btn-toggle">
+    {{ $post->status == 'draft' ? 'Publish Now' : 'Revert to Draft' }}
+</a>
 
 <a href="{{ route('posts.show',$post->slug) }}" class="btn btn-view">
 View
